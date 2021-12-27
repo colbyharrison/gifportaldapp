@@ -33,7 +33,7 @@ pub mod gifportaldapp {
     let base_account = &mut ctx.accounts.base_account;
 
     for item in base_account.gif_list.iter_mut() {
-        if ( gif_link == item.gif_link) {
+        if gif_link == item.gif_link {
             item.up_votes += 1;
         }
     }

@@ -27,4 +27,36 @@ describe('gifportaldapp', () => {
     const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
     assert.ok(account.totalGifs.eq(new anchor.BN(0)))
   });
+
+  it('Gif added', async () => {
+
+    const gifLink = 'insert_a_giphy_link_here';
+    await program.rpc.addGif(gifLink, {
+      accounts: {
+        baseAccount: baseAccount.publicKey,
+        user: provider.wallet.publicKey,
+      },
+    });
+
+    const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+
+    assert.ok(account.totalGifs.eq(new anchor.BN(1)))
+    assert.equal(account.gifList[0].gifLink, gifLink);
+    assert.equal(Object.keys(account.gifList).length, 1)
+
+  });
+
+  it('Gif upvoted', async () => {
+
+    const gifLink = 'insert_a_giphy_link_here';
+    await program.rpc.incrementUpVote(gifLink, {
+      accounts: {
+        baseAccount: baseAccount.publicKey,
+        user: provider.wallet.publicKey,
+      },
+    });
+
+    const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
+    assert.ok(account.gifList[0].upVotes.eq(new anchor.BN(1)));
+  });
 });
