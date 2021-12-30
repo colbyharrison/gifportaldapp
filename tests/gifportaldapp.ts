@@ -2,9 +2,14 @@ import * as anchor from '@project-serum/anchor';
 import { Program } from '@project-serum/anchor';
 import { Gifportaldapp } from '../target/types/gifportaldapp';
 import assert from 'assert';
+import AccountFactory from '@project-serum/anchor/dist/cjs/program/namespace/account';
+
+
+// const serumCmn = require("@project-serum/common");
+// import { TOKEN_PROGRAM_ID, Token } from "@solana/spl-token";
+
 
 const { SystemProgram } = anchor.web3;
-
 
 describe('gifportaldapp', () => {
 
@@ -58,5 +63,23 @@ describe('gifportaldapp', () => {
 
     const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
     assert.ok(account.gifList[0].upVotes.eq(new anchor.BN(1)));
+  });
+
+  it('Tip gif poster', async () => {
+    const gifLink = 'insert_a_giphy_link_here';
+
+    const gifOwner = anchor.web3.Keypair.generate();
+
+    let sendAmount = anchor.web3.LAMPORTS_PER_SOL * 10
+    await program.rpc.tip(sendAmount.toString(), {
+      accounts: {
+        from: provider.wallet.publicKey,
+        to: gifOwner.publicKey,
+        systemProgram: SystemProgram.programId
+      }
+    });
+
+    const gifOwnerBalance = await provider.connection.getBalance(gifOwner.publicKey);
+    assert.equal(sendAmount, gifOwnerBalance)
   });
 });
