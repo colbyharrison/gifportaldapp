@@ -45,16 +45,18 @@ describe('gifportaldapp', () => {
 
     const account = await program.account.baseAccount.fetch(baseAccount.publicKey);
 
+    console.log(account);
     assert.ok(account.totalGifs.eq(new anchor.BN(1)))
     assert.equal(account.gifList[0].gifLink, gifLink);
+    assert.ok(account.gifList[0].id.eq(new anchor.BN(0)));
     assert.equal(Object.keys(account.gifList).length, 1)
 
   });
 
   it('Gif upvoted', async () => {
 
-    const gifLink = 'insert_a_giphy_link_here';
-    await program.rpc.incrementUpVote(gifLink, {
+    const gifId = '0';
+    await program.rpc.incrementUpVote(gifId, {
       accounts: {
         baseAccount: baseAccount.publicKey,
         user: provider.wallet.publicKey,

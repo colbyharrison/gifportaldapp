@@ -1,6 +1,5 @@
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::{program::invoke, system_instruction::transfer};
-
 declare_id!("J47bu99JDY6GdnyQ6yZ7nz4uRePWPa99zpjQz2ubc9xt");
 
 #[program]
@@ -19,6 +18,7 @@ pub mod gifportaldapp {
 
         // Build the struct.
         let item = ItemStruct {
+            id: base_account.total_gifs, // TODO need a better id than count (rand not available)
             gif_link: gif_link.to_string(),
             user_address: *user.to_account_info().key,
             up_votes: 0,
@@ -30,11 +30,12 @@ pub mod gifportaldapp {
         Ok(())
     }
 
-    pub fn increment_up_vote(ctx: Context<IncrementUpVote>, gif_link: String) -> ProgramResult {
+    pub fn increment_up_vote(ctx: Context<IncrementUpVote>, gif_id: String) -> ProgramResult {
         let base_account = &mut ctx.accounts.base_account;
+        let id = gif_id.trim().parse::<u64>().expect("This must be a number");
 
         for item in base_account.gif_list.iter_mut() {
-            if gif_link == item.gif_link {
+            if id == item.id {
                 item.up_votes += 1;
             }
         }
@@ -103,6 +104,7 @@ pub struct Tip<'info> {
 // Create a custom struct for us to work with.
 #[derive(Debug, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct ItemStruct {
+    pub id: u64,
     pub gif_link: String,
     pub user_address: Pubkey,
     pub up_votes: u64,
