@@ -1,11 +1,11 @@
-[programs.localnet]
+[programs.devnet]
 gifportaldapp = "J47bu99JDY6GdnyQ6yZ7nz4uRePWPa99zpjQz2ubc9xt"
 
 [registry]
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "/Users/colbyharrison/.config/solana/id.json"
 
 [scripts]
