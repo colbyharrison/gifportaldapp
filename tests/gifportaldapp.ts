@@ -4,15 +4,7 @@ import { Gifportaldapp } from '../target/types/gifportaldapp';
 import assert from 'assert';
 import AccountFactory from '@project-serum/anchor/dist/cjs/program/namespace/account';
 
-
-// const serumCmn = require("@project-serum/common");
-// import { TOKEN_PROGRAM_ID, Token } from "@solana/spl-token";
-
-
 const { SystemProgram } = anchor.web3;
-
-
-
 
 describe('gifportaldapp', () => {
 
@@ -107,6 +99,6 @@ describe('gifportaldapp', () => {
     });
 
     const gifOwnerBalance = await provider.connection.getBalance(gifContributor.publicKey);
-    assert.equal(sendAmount, gifOwnerBalance); //fails does not account for fees?
+    assert.equal(sendAmount, gifOwnerBalance);
   });
 });
